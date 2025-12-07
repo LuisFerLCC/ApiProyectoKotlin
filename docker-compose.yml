@@ -1,0 +1,53 @@
+volumes:
+  mysql-proyectokotlin:
+
+services:
+  app:
+    image: api-proyectokotlin:latest
+    build:
+      context: .
+
+    environment:
+      PORT: 3000
+      DB_NAME: ProyectoFinal
+      DB_USER: root
+      DB_PASS: root
+      DB_HOST: db
+      JWT_SECRET: 123
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    ports:
+      - "3000:3000"
+
+  db:
+    image: mysql:latest
+
+    volumes:
+      - mysql-proyectokotlin:/var/lib/mysql
+
+    environment:
+      MYSQL_DATABASE: ProyectoFinal
+      MYSQL_ROOT_PASSWORD: root
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "--silent",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+    ports:
+      - "3306:3306"
