@@ -1,6 +1,8 @@
 import dotenv from "dotenv";
 dotenv.config();
 
+import bcrypt from "bcryptjs";
+
 import app from "./app.js";
 import { connectDB, sequelize } from "./config/database.js";
 import "./models/userModel.js";
@@ -21,20 +23,20 @@ const start = async () => {
 			name: "Usuario de prueba 1",
 			username: "usuario1",
 			email: "usuario1@correo.com",
-			password: "usuario1",
+			password: await bcrypt.hash("usuario1", 10),
 			avatar: "https://avatars.githubusercontent.com/u/81205298?s=400&v=4",
 		});
 		await User.create({
 			name: "Usuario de prueba 2",
 			username: "usuario2",
 			email: "usuario2@correo.com",
-			password: "usuario2",
+			password: await bcrypt.hash("usuario2", 10),
 		});
 		await User.create({
 			name: "Usuario de prueba 3",
 			username: "usuario3",
 			email: "usuario3@correo.com",
-			password: "usuario3",
+			password: await bcrypt.hash("usuario3", 10),
 			avatar: "https://avatars.githubusercontent.com/u/151427821?v=4",
 		});
 	}
